@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BassCaptain - DJ Booking App | Earn Money as a DJ | Join Basswala Captains</title>
+<meta content="Become a Basswala Captain with BassCaptain - India's #1 DJ booking app. Get instant gigs, automatic payouts, and control your career. No middlemen." name="description"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #18203b;
+            color: #edc1c2;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: linear-gradient(135deg, #18203b 0%, #302149 50%, #18203b 100%);
+        }
+
+        #bg-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 1200px;
+            padding: 20px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #550dad, #50e4d7, #a01b6a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 40px rgba(80, 228, 215, 0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+         .logo {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 30px;
+            border-radius: 50%;
+            box-shadow: 0 0 50px rgba(255, 0, 150, 0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 20px rgba(80, 228, 215, 0.5)); }
+            to { filter: drop-shadow(0 0 40px rgba(165, 27, 106, 0.8)); }
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            color: #edc1c2;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 18px 45px;
+            background: linear-gradient(135deg, #550dad, #a01b6a);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(85, 13, 173, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(165, 27, 106, 0.7);
+        }
+
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .cta-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .phone-mockup {
+            position: absolute;
+            right: 10%;
+            top: 50%;
+            transform: translateY(-50%) perspective(1000px) rotateY(-15deg);
+            width: 300px;
+            height: 600px;
+            background: linear-gradient(135deg, #302149, #18203b);
+            border-radius: 40px;
+            padding: 15px;
+            box-shadow: 0 30px 80px rgba(85, 13, 173, 0.6);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(-50%) perspective(1000px) rotateY(-15deg) translateZ(0); }
+            50% { transform: translateY(-50%) perspective(1000px) rotateY(-15deg) translateZ(20px); }
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: #18203b;
+            border-radius: 30px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .app-ui {
+            padding: 20px;
+            color: #50e4d7;
+        }
+
+        .app-ui h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #550dad;
+        }
+
+        .notification {
+            background: rgba(80, 228, 215, 0.1);
+            border-left: 3px solid #50e4d7;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            animation: slideIn 0.5s ease;
+        }
+
+        /* Section Styles */
+        section {
+            padding: 100px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, #550dad, #50e4d7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* How It Works */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .step-card {
+            background: linear-gradient(135deg, #302149, #18203b);
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.4s;
+            position: relative;
+            transform-style: preserve-3d;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .step-card:hover {
+            transform: translateY(-15px) rotateX(5deg);
+            box-shadow: 0 20px 50px rgba(85, 13, 173, 0.6);
+        }
+
+        .step-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 20px #50e4d7);
+        }
+
+        .step-card h3 {
+            color: #50e4d7;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .step-card p {
+            color: #edc1c2;
+            line-height: 1.6;
+        }
+
+        /* Features Grid */
+       .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 3rxem;
+            margin-bottom: 20px;
+            color: #ff0080;
+        }
+
+        .feature-card h3 {
+            color: #50e4d7;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        /* Pro Section */
+        .pro-section {
+            background: linear-gradient(135deg, #302149, #550dad);
+            padding: 80px 40px;
+            border-radius: 30px;
+            margin: 60px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pro-section::before {
+            content: '👑';
+            position: absolute;
+            font-size: 20rem;
+            opacity: 0.05;
+            right: -50px;
+            top: 50%;
+            transform: translateY(-50%) rotate(-15deg);
+        }
+
+        .pro-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .pro-feature {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid #50e4d7;
+            backdrop-filter: blur(10px);
+        }
+
+        .pro-feature h4 {
+            color: #50e4d7;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        /* Coming Soon */
+        .coming-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .coming-card {
+            background: linear-gradient(135deg, #302149, #18203b);
+            padding: 40px;
+            border-radius: 20px;
+            position: relative;
+            filter: blur(1px);
+            transition: all 0.3s;
+        }
+
+        .coming-card:hover {
+            filter: blur(0);
+            transform: scale(1.05);
+        }
+
+        .soon-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #a01b6a;
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Testimonials */
+        .testimonials {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .testimonial-card {
+            background: linear-gradient(135deg, #302149, #18203b);
+            padding: 40px;
+            border-radius: 20px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: all 0.4s;
+        }
+
+        .testimonial-card:hover {
+            transform: translateZ(20px) rotateX(5deg);
+        }
+
+        .stars {
+            color: #50e4d7;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .testimonial-card p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #edc1c2;
+        }
+
+        .author {
+            color: #50e4d7;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+            text-align: center;
+        }
+
+        .stat-item {
+            background: rgba(80, 228, 215, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid #50e4d7;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            color: #50e4d7;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* FAQ */
+        .faq-container {
+            max-width: 900px;
+            margin: 60px auto;
+        }
+
+        .faq-item {
+            background: linear-gradient(135deg, #302149, #18203b);
+            margin: 20px 0;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(80, 228, 215, 0.2);
+        }
+
+        .faq-question {
+            padding: 25px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #50e4d7;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .faq-question:hover {
+            background: rgba(80, 228, 215, 0.1);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 25px;
+            color: #edc1c2;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+            padding: 0 25px 25px;
+        }
+
+        .faq-item.active .faq-question::after {
+            transform: rotate(180deg);
+        }
+
+        .faq-question::after {
+            content: '▼';
+            transition: transform 0.3s;
+        }
+
+        /* Final CTA */
+        .final-cta {
+            background: linear-gradient(135deg, #550dad, #a01b6a);
+            padding: 100px 40px;
+            text-align: center;
+            border-radius: 30px;
+            margin: 60px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .final-cta::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
+            opacity: 0.3;
+            animation: scroll 20s linear infinite;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100px); }
+        }
+
+        .final-cta h2 {
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        .final-cta p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            color: #edc1c2;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .secondary-btn {
+            padding: 15px 35px;
+            background: transparent;
+            border: 2px solid #50e4d7;
+            color: #50e4d7;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .secondary-btn:hover {
+            background: #50e4d7;
+            color: #18203b;
+            transform: scale(1.05);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .phone-mockup {
+                display: none;
+            }
+
+            section {
+                padding: 60px 20px;
+            }
+
+            .steps, .features-grid, .testimonials {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scroll animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+          /* Footer */
+        .footer {
+            background: var(--background);
+            border-top: 1px solid var(--border);
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-content {
+            display: grid;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        @media (min-width: 768px) {
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .footer-content {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .footer-section h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            margin: 10px; 
+        }
+
+        .footer-section p {
+            color: var(--muted-foreground);
+            margin-bottom: 1rem;
+            margin: 10px; 
+        }
+
+        .footer-links {
+            list-style: none;
+            margin: 10px;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: var(--muted-foreground);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+        /* WHATSAPP BUTTON (FROM TAE V.02) */
+.whatsapp-btn{
+    position:fixed;
+    bottom:30px;
+    right:30px;
+    z-index:999;
+    animation:pulse 2s infinite;
+}
+.whatsapp-btn img{
+    width:60px;
+    height:60px;
+}
+@keyframes pulse{
+    0%,100%{transform:scale(1)}
+    50%{transform:scale(1.1)}
+}
+    </style>
+</head>
+<body>
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+                  <div class="logo">
+      <img src="logo(no-bg) (150x150).png" alt="Basswala logo" loading="lazy" />
+    </div>
+<canvas id="bg-canvas"></canvas>
+<div class="hero-content">
+<h1>Rule the Night. Earn Like a Captain.</h1>
+<p>BassCaptain is the DJ booking app that puts you in control. Connect directly with clients and event owners. No middlemen. No waiting. Just pure gigs, instant bookings, and automatic payouts.</p>
+<a class="cta-btn" href="https://play.google.com/store/apps/details?id=com.basswaala.serviceprovider">Become a Captain Now</a>
+</div>
+<div class="phone-mockup">
+<div class="phone-screen">
+<div class="app-ui">
+<h3>Live Dashboard</h3>
+<div class="notification">🎵 New Booking: Skybar Club</div>
+<div class="notification">💰 Payment Received: ₹12,500</div>
+<div class="notification">🔥 Urgent Gig: Corporate Event</div>
+<div class="notification">📊 Earnings Today: ₹45,000</div>
+</div>
+</div>
+</div>
+</section>
+<!-- How It Works -->
+<section class="reveal" id="how-it-works">
+<h2>Four Steps to Freedom</h2>
+<div class="steps">
+<div class="step-card">
+<div class="step-icon">📱</div>
+<h3>Sign Up in Seconds</h3>
+<p>Use your phone or email to join the Basswala Captain network instantly.</p>
+</div>
+<div class="step-card">
+<div class="step-icon">🎧</div>
+<h3>Build Your DJ Profile</h3>
+<p>Showcase your style, experience, and availability. Let your vibe speak.</p>
+</div>
+<div class="step-card">
+<div class="step-icon">⚡</div>
+<h3>Accept Gigs Instantly</h3>
+<p>Browse bookings or grab urgent broadcasts. No approval needed. You're the boss.</p>
+</div>
+<div class="step-card">
+<div class="step-icon">💰</div>
+<h3>Get Paid Automatically</h3>
+<p>Cash or digital — payments flow directly to you after every gig.</p>
+</div>
+</div>
+</section>
+<!-- Power Features -->
+<section class="reveal" id="features">
+<h2>Built for Captains Who Mean Business</h2>
+<div class="features-grid">
+<div class="feature-card">
+<span class="feature-icon">🎵</span>
+<h3>Instant Bookings</h3>
+<p>No more chasing clients. Accept gigs with one tap and own your calendar. Become a Basswala Captain and watch your schedule fill up.</p>
+</div>
+<div class="feature-card">
+<span class="feature-icon">🔥</span>
+<h3>Urgent Broadcasts</h3>
+<p>High-paying, last-minute gigs? You see them first. Grab premium opportunities before anyone else and earn money as a DJ on your terms.</p>
+</div>
+<div class="feature-card">
+<span class="feature-icon">💰</span>
+<h3>Seamless Payments</h3>
+<p>Choose cash or online. Either way, you're in control. Track every rupee in your earnings dashboard.</p>
+</div>
+<div class="feature-card">
+<span class="feature-icon">📱</span>
+<h3>QR Check-ins</h3>
+<p>Verify bookings instantly with secure QR codes. No confusion. No disputes. Just smooth, professional service.</p>
+</div>
+<div class="feature-card">
+<span class="feature-icon">📍</span>
+<h3>Live Tracking</h3>
+<p>Know exactly where your client is. Navigate to venues with confidence using real-time GPS tracking.</p>
+</div>
+<div class="feature-card">
+<span class="feature-icon">📊</span>
+<h3>Earnings Dashboard</h3>
+<p>Watch your empire grow. Daily, weekly, monthly analytics at your fingertips. Know your worth.</p>
+</div>
+</div>
+</section>
+<!-- Pro Section -->
+<section class="reveal" id="pro">
+<div class="pro-section">
+<h2 style="color: #fff;">Go Pro. Dominate the Night Scene.</h2>
+<p style="text-align: center; font-size: 1.2rem; max-width: 800px; margin: 0 auto 3rem;">Unlock elite features and take your DJ career to the next level with BassCaptain Pro.</p>
+<div class="pro-features">
+<div class="pro-feature">
+<h4>🎚️ Multiple DJ Sub-Profiles</h4>
+<p>Manage different styles, aliases, or team members under one account. Expand your brand effortlessly.</p>
+</div>
+<div class="pro-feature">
+<h4>⚡ Auto Payouts After Every Gig</h4>
+<p>Get paid instantly after each ride or daily. No waiting for weekly settlements. Your money, your schedule.</p>
+</div>
+<div class="pro-feature">
+<h4>📈 Advanced Income Analytics</h4>
+<p>Deep-dive into your earnings with comprehensive breakdowns. See what's working, scale what's profitable.</p>
+</div>
+<div class="pro-feature">
+<h4>🚨 Priority Access to Urgent Gigs</h4>
+<p>Pro Captains see high-value broadcasts before everyone else. Be first in line for the best-paying events.</p>
+</div>
+<div class="pro-feature">
+<h4>💎 Verified Captain Badge</h4>
+<p>Stand out with exclusive verification. Clients trust Pros more, which means more bookings for you.</p>
+</div>
+</div>
+<div style="text-align: center; margin-top: 3rem;">
+<a class="cta-btn" href="https://play.google.com/store/apps/details?id=com.basswaala.serviceprovider">Upgrade to Pro</a>
+</div>
+</div>
+</section>
+<!-- Coming Soon -->
+
+<!-- FAQ -->
+<section class="reveal" id="faq">
+<h2>Got Questions? We've Got Answers.</h2>
+<div class="faq-container">
+<div class="faq-item">
+<div class="faq-question">How often do I get paid?</div>
+<div class="faq-answer">
+<p>Captains receive weekly payouts.</p>
+</div>
+</div>
+<div class="faq-item">
+<div class="faq-question">How much does BassCaptain cost?</div>
+<div class="faq-answer">
+<p>Free to join! BassCaptain Standard has zero subscription fees.</p>
+</div>
+</div>
+<div class="faq-item">
+<div class="faq-question">Do I need approval to start accepting bookings?</div>
+<div class="faq-answer">
+<p>Nope! Once your profile is complete, you can start accepting gigs immediately. You're the captain of your schedule.</p>
+</div>
+</div>
+<div class="faq-item">
+<div class="faq-question">What if a client cancels?</div>
+<div class="faq-answer">
+<p>You're protected by our cancellation policy. Depending on timing, you'll receive partial to full payment compensation.</p>
+</div>
+</div>
+<div class="faq-item">
+<div class="faq-question">Can I work in multiple cities?</div>
+<div class="faq-answer">
+<p>Absolutely! Update your service area anytime and accept bookings wherever your travels take you.</p>
+</div>
+</div>
+<div class="faq-item">
+<div class="faq-question">How do I contact support?</div>
+<div class="faq-answer">
+<p>24/7 in-app support, email us at support@basswala.com, or visit our Help Center at basswala.com/help.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="reveal" id="signup">
+<div class="final-cta">
+<h2>The Stage Is Waiting. Become a BassCaptain Today.</h2>
+<p>Join thousands of DJs who took control of their careers. Download BassCaptain now and start earning on your terms. No middlemen. No limits. Just you, your music, and a world of opportunity.</p>
+<div class="cta-buttons">
+<a class="cta-btn" href="#">Download on App Store</a>
+<a class="cta-btn" href="https://play.google.com/store/apps/details?id=com.basswaala.serviceprovider">Get it on Google Play</a>
+<a class="cta-btn" href="https://play.google.com/store/apps/details?id=com.basswaala.serviceprovider">Start Earning</a></div>
+<p style="margin-top: 2rem; font-style: italic;">BassCaptain by Basswala, Where DJs Become Legends</p>
+</div>
+</section>
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <!-- Logo & About -->
+            <div class="footer-section">
+                <div class="logo mb-4">
+                    <!-- Using an image for the logo for better control and styling -->
+                    <img src="logo(no-bg) (150x150).png" alt="BASSWALA Logo" style="width: 150px; height: 150px; border-radius: 50%; margin-right: 10px; vertical-align: middle;">
+                    
+                </div>
+                <div class="social-links" style="display: flex; gap: 15px; margin-top: 20px;">
+                    <a href="https://www.facebook.com/share/1GAWkiMNRC/" target="_blank"rel="noopener noreferrer" class="social-link">
+                        <img src="https://img.icons8.com/ios-filled/30/ffffff/facebook-new.png" alt="Facebook" style="width: 30px; height: 30px;"/>
+                    </a>
+                    <a href="https://www.instagram.com/bass_wala.official?utm_source=qr&igsh=MTc3MHgxeDhkcGh4ZA==" target="_blank" rel="noopener noreferrer" class="social-link">
+                        <img src="https://img.icons8.com/ios-filled/30/ffffff/instagram-new--v1.png" alt="Instagram" style="width: 30px; height: 30px;"/>
+                    </a>
+                    <a href="https://x.com/bass_wala_?t=sm3XAsj41V2CMnl0xXFiUA&s=08" target="_blank" rel="noopener noreferrer" class="social-link">
+                        <img src="https://img.icons8.com/ios-filled/30/ffffff/twitterx--v1.png" alt="Twitter" style="width: 30px; height: 30px;"/>
+                    </a>
+                    <a href="https://www.youtube.com/@BASSWALAOFFICIAL" target="_blank" rel="noopener noreferrer"  class="social-link">
+                        <img src="https://img.icons8.com/ios-filled/30/ffffff/youtube-play--v1.png" alt="YouTube" style="width: 30px; height: 30px;"/>
+                    </a>
+                </div>
+            </div>
+
+
+            <!-- Services -->
+            <div class="footer-section">
+                <h3>Services</h3>
+                <ul class="footer-links">
+                    <li><a href="#">DJ Services</a></li>
+                    <li><a href="#">Speaker Rental</a></li>
+                    <li><a href="#">Event Management</a></li>
+                    <li><a href="#">Equipment Rental</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact -->
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                    <img src="https://img.icons8.com/ios-filled/20/ffffff/phone.png" alt="Phone" style="width: 20px; height: 20px;"/>
+                    <span><a href="tel:+91 99284 25013" style="color: inherit; text-decoration: none;">+91 99284 25013</a></span>
+                
+                    <br><img src="https://img.icons8.com/ios-filled/20/ffffff/new-post.png" alt="Mail" style="width: 20px; height: 20px;"/>
+                    <span><a href="mailto:bw@basswala.com" style="color: inherit; text-decoration: none;">bw@basswala.com</a></span>
+                
+                   <br> <img src="https://img.icons8.com/ios-filled/20/ffffff/marker--v1.png" alt="Location" style="width: 20px; height: 20px;"/>
+                    <span>Jaipur, India</span>
+            </div>
+        </div>
+
+        <!-- Footer Bottom Menu -->
+        <div class="footer-bottom" style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 20px; margin-top: 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+            <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.875rem;">
+                © 2025 BASSWALA. All rights reserved.
+            </div>
+            <div class="footer-links-bottom" style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <a href="#" style="color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.3s ease;">Home</a>
+                <a href="Basswala_Privacy_Policy.html" style="color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.3s ease;">Privacy Policy</a>
+                <a href="Basswala_Terms_of_Use1.html" style="color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.3s ease;">Terms of Service</a>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- WHATSAPP FLOATING BUTTON -->
+<a href="https://wa.me/919828425013?text=Hi%20BassCaptain%20Team,%20I%20want%20to%20know%20more."
+   target="_blank"
+   class="whatsapp-btn"
+   aria-label="Chat on WhatsApp">
+   <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+</a>
+<script>
+        // Three.js Background Animation
+        const canvas = document.getElementById('bg-canvas');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.position.z = 5;
+
+        // Create particles
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 1000;
+        const posArray = new Float32Array(particlesCount * 3);
+
+        for(let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 10;
+        }
+
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.02,
+            color: 0x50e4d7,
+            transparent: true,
+            opacity: 0.8
+        });
+
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+
+        // Animation
+        let mouseX = 0;
+        let mouseY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX / window.innerWidth - 0.5;
+            mouseY = e.clientY / window.innerHeight - 0.5;
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+            particlesMesh.rotation.y += 0.001;
+            particlesMesh.rotation.x = mouseY * 0.1;
+            particlesMesh.rotation.y = mouseX * 0.1;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Resize handler
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const faqItem = question.parentElement;
+                faqItem.classList.toggle('active');
+            });
+        });
+
+        // Scroll reveal animation
+        const reveals = document.querySelectorAll('.reveal');
+        
+        function checkReveal() {
+            reveals.forEach(reveal => {
+                const windowHeight = window.innerHeight;
+                const revealTop = reveal.getBoundingClientRect().top;
+                const revealPoint = 150;
+
+                if(revealTop < windowHeight - revealPoint) {
+                    reveal.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', checkReveal);
+        checkReveal();
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if(target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Counter animation for stats
+        function animateCounter(element) {
+            const target = parseInt(element.textContent.replace(/[^\d]/g, ''));
+            const duration = 2000;
+            const increment = target / (duration / 16);
+            let current = 0;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if(current >= target) {
+                    element.textContent = element.textContent.replace(/[\d,]+/, target.toLocaleString('en-IN'));
+                    clearInterval(timer);
+                } else {
+                    element.textContent = element.textContent.replace(/[\d,]+/, Math.floor(current).toLocaleString('en-IN'));
+                }
+            }, 16);
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    const statNumbers = entry.target.querySelectorAll('.stat-number');
+                    statNumbers.forEach(animateCounter);
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+
+        const statsSection = document.querySelector('.stats');
+        if(statsSection) observer.observe(statsSection);
+    </script>
+</body>
+</html>
