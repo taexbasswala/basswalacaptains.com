@@ -1,366 +1,548 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Basswala - Premium DJ & Sound Rental</title>
-    <meta name="description" content="Book premium DJ sets and sound equipment for your events. Professional BassCaptains, transparent pricing, and hassle-free booking.">
-    
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
-    
-    <!-- EmailJS SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    
-    <!-- Leaflet JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-    
-    <!-- Razorpay SDK -->
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    
-    <!-- Google Sign-In -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    
-    <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>BassCaptain - DJ Booking App | Earn Money as a DJ | Join Basswala Captains</title>
+<meta content="Become a Basswala Captain with BassCaptain - India's #1 DJ booking app. Get instant gigs, automatic payouts, and control your career. No middlemen." name="description"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        :root {
-            --pink: #ff006e;
-            --blue: #00d4ff;
-            --dark: #0a0a0f;
-            --dark-light: #1a1a2e;
-            --glass: rgba(255, 255, 255, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.2);
-        }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #0f0f1e 100%);
-            color: #fff;
-            min-height: 100vh;
+            background: #18203b;
+            color: #edc1c2;
             overflow-x: hidden;
-            position: relative;
         }
 
-        body::before {
-            content: '';
-            position: fixed;
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: linear-gradient(135deg, #18203b 0%, #302149 50%, #18203b 100%);
+        }
+
+        #bg-canvas {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: 
-                radial-gradient(circle at 20% 50%, rgba(255, 0, 110, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(0, 212, 255, 0.15) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .container {
-            position: relative;
             z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
             max-width: 1200px;
-            margin: 0 auto;
             padding: 20px;
+            animation: fadeInUp 1s ease;
         }
 
-        /* Header */
-        header {
-            background: rgba(26, 26, 46, 0.4);
-            backdrop-filter: blur(20px);
-            padding: 20px;
-            border-radius: 20px;
-            margin-bottom: 30px;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-
-        .logo {
-            font-size: 2.5em;
-            font-weight: bold;
-            background: linear-gradient(135deg, var(--pink), var(--blue));
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #550dad, #50e4d7, #a01b6a);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-align: center;
-            letter-spacing: 2px;
-            text-shadow: 0 0 30px rgba(255, 0, 110, 0.5);
+            background-clip: text;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 40px rgba(80, 228, 215, 0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+         .logo {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 30px;
+            border-radius: 50%;
+            box-shadow: 0 0 50px rgba(255, 0, 150, 0.5);
+            animation: glow 2s ease-in-out infinite alternate;
         }
 
-        /* Glass Card */
-        .glass-card {
-            background: rgba(26, 26, 46, 0.4);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            padding: 30px;
-            border: 1px solid var(--glass-border);
-            box-shadow: 
-                0 8px 32px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            margin-bottom: 20px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 20px rgba(80, 228, 215, 0.5)); }
+            to { filter: drop-shadow(0 0 40px rgba(165, 27, 106, 0.8)); }
         }
 
-        .glass-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 
-                0 12px 48px rgba(0, 0, 0, 0.4),
-                0 0 20px rgba(255, 0, 110, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            color: #edc1c2;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
         }
 
-        /* Buttons */
-        .btn {
-            background: linear-gradient(135deg, var(--pink), var(--blue));
-            color: white;
-            border: none;
-            padding: 15px 40px;
+        .cta-btn {
+            display: inline-block;
+            padding: 18px 45px;
+            background: linear-gradient(135deg, #550dad, #a01b6a);
+            color: #fff;
+            text-decoration: none;
             border-radius: 50px;
-            font-size: 16px;
+            font-size: 1.2rem;
             font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 0, 110, 0.4);
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(85, 13, 173, 0.5);
             position: relative;
             overflow: hidden;
         }
 
-        .btn::before {
+        .cta-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(165, 27, 106, 0.7);
+        }
+
+        .cta-btn::before {
             content: '';
             position: absolute;
             top: 50%;
             left: 50%;
             width: 0;
             height: 0;
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
             transform: translate(-50%, -50%);
             transition: width 0.6s, height 0.6s;
         }
 
-        .btn:hover::before {
+        .cta-btn:hover::before {
             width: 300px;
             height: 300px;
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 0, 110, 0.6);
+        .phone-mockup {
+            position: absolute;
+            right: 10%;
+            top: 50%;
+            transform: translateY(-50%) perspective(1000px) rotateY(-15deg);
+            width: 300px;
+            height: 600px;
+            background: linear-gradient(135deg, #302149, #18203b);
+            border-radius: 40px;
+            padding: 15px;
+            box-shadow: 0 30px 80px rgba(85, 13, 173, 0.6);
+            animation: float 3s ease-in-out infinite;
         }
 
-        .btn:active {
-            transform: translateY(0);
+        @keyframes float {
+            0%, 100% { transform: translateY(-50%) perspective(1000px) rotateY(-15deg) translateZ(0); }
+            50% { transform: translateY(-50%) perspective(1000px) rotateY(-15deg) translateZ(20px); }
         }
 
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: #18203b;
+            border-radius: 30px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .app-ui {
+            padding: 20px;
+            color: #50e4d7;
+        }
+
+        .app-ui h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #550dad;
+        }
+
+        .notification {
+            background: rgba(80, 228, 215, 0.1);
+            border-left: 3px solid #50e4d7;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            animation: slideIn 0.5s ease;
+        }
+
+        /* Section Styles */
+        section {
+            padding: 100px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, #550dad, #50e4d7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* How It Works */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .step-card {
+            background: linear-gradient(135deg, #302149, #18203b);
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.4s;
+            position: relative;
+            transform-style: preserve-3d;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .step-card:hover {
+            transform: translateY(-15px) rotateX(5deg);
+            box-shadow: 0 20px 50px rgba(85, 13, 173, 0.6);
+        }
+
+        .step-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 20px #50e4d7);
+        }
+
+        .step-card h3 {
+            color: #50e4d7;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .step-card p {
+            color: #edc1c2;
+            line-height: 1.6;
+        }
+
+        /* Features Grid */
+       .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
             backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Auth Screen */
-        .auth-container {
-            max-width: 450px;
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 3rxem;
+            margin-bottom: 20px;
+            color: #ff0080;
+        }
+
+        .feature-card h3 {
+            color: #50e4d7;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        /* Pro Section */
+        .pro-section {
+            background: linear-gradient(135deg, #302149, #550dad);
+            padding: 80px 40px;
+            border-radius: 30px;
+            margin: 60px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pro-section::before {
+            content: '👑';
+            position: absolute;
+            font-size: 20rem;
+            opacity: 0.05;
+            right: -50px;
+            top: 50%;
+            transform: translateY(-50%) rotate(-15deg);
+        }
+
+        .pro-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .pro-feature {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid #50e4d7;
+            backdrop-filter: blur(10px);
+        }
+
+        .pro-feature h4 {
+            color: #50e4d7;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        /* Coming Soon */
+        .coming-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .coming-card {
+            background: linear-gradient(135deg, #302149, #18203b);
+            padding: 40px;
+            border-radius: 20px;
+            position: relative;
+            filter: blur(1px);
+            transition: all 0.3s;
+        }
+
+        .coming-card:hover {
+            filter: blur(0);
+            transform: scale(1.05);
+        }
+
+        .soon-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #a01b6a;
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Testimonials */
+        .testimonials {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .testimonial-card {
+            background: linear-gradient(135deg, #302149, #18203b);
+            padding: 40px;
+            border-radius: 20px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: all 0.4s;
+        }
+
+        .testimonial-card:hover {
+            transform: translateZ(20px) rotateX(5deg);
+        }
+
+        .stars {
+            color: #50e4d7;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .testimonial-card p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #edc1c2;
+        }
+
+        .author {
+            color: #50e4d7;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+            text-align: center;
+        }
+
+        .stat-item {
+            background: rgba(80, 228, 215, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid #50e4d7;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            color: #50e4d7;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* FAQ */
+        .faq-container {
+            max-width: 900px;
             margin: 60px auto;
         }
 
-        .auth-title {
-            font-size: 2em;
-            margin-bottom: 30px;
-            text-align: center;
-            background: linear-gradient(135deg, var(--pink), var(--blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid var(--glass-border);
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-
-        .input-group input:focus {
-            outline: none;
-            border-color: var(--pink);
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 20px rgba(255, 0, 110, 0.3);
-        }
-
-        .divider {
-            text-align: center;
-            margin: 30px 0;
-            position: relative;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            width: 40%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
-        }
-
-        .divider::before {
-            left: 0;
-        }
-
-        .divider::after {
-            right: 0;
-        }
-
-        /* DJ Cards */
-        .dj-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-        }
-
-        .dj-card {
-            position: relative;
-            border-radius: 20px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .dj-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(255, 0, 110, 0.2), rgba(0, 212, 255, 0.2));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .dj-card:hover::before {
-            opacity: 1;
-        }
-
-        .dj-image {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-        }
-
-        .dj-info {
-            padding: 20px;
-        }
-
-        .dj-name {
-            font-size: 1.5em;
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, var(--pink), var(--blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .dj-location, .dj-price {
-            color: rgba(255, 255, 255, 0.7);
-            margin: 5px 0;
-        }
-
-        .dj-rating {
-            color: #ffd700;
-            font-size: 1.1em;
-        }
-
-        /* Booking Form */
-        .booking-section {
-            margin-top: 30px;
-        }
-
-        .price-breakdown {
-            background: rgba(255, 0, 110, 0.1);
-            border: 1px solid var(--pink);
-            border-radius: 16px;
-            padding: 20px;
+        .faq-item {
+            background: linear-gradient(135deg, #302149, #18203b);
             margin: 20px 0;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(80, 228, 215, 0.2);
         }
 
-        .price-row {
+        .faq-question {
+            padding: 25px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #50e4d7;
+            font-weight: bold;
             display: flex;
             justify-content: space-between;
-            margin: 10px 0;
-            font-size: 1.1em;
+            align-items: center;
+            transition: all 0.3s;
         }
 
-        .price-total {
-            font-size: 1.3em;
-            font-weight: bold;
-            color: var(--pink);
-            border-top: 2px solid var(--glass-border);
-            padding-top: 15px;
-            margin-top: 15px;
+        .faq-question:hover {
+            background: rgba(80, 228, 215, 0.1);
         }
 
-        /* Map */
-        #map {
-            height: 300px;
-            border-radius: 16px;
-            margin: 20px 0;
-            border: 2px solid var(--glass-border);
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 25px;
+            color: #edc1c2;
         }
 
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+            padding: 0 25px 25px;
+        }
+
+        .faq-item.active .faq-question::after {
+            transform: rotate(180deg);
+        }
+
+        .faq-question::after {
+            content: '▼';
+            transition: transform 0.3s;
+        }
+
+        /* Final CTA */
+        .final-cta {
+            background: linear-gradient(135deg, #550dad, #a01b6a);
+            padding: 100px 40px;
+            text-align: center;
+            border-radius: 30px;
+            margin: 60px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .final-cta::before {
+            content: '';
+            position: absolute;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
+            opacity: 0.3;
+            animation: scroll 20s linear infinite;
         }
 
-        .modal.active {
+        @keyframes scroll {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100px); }
+        }
+
+        .final-cta h2 {
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        .final-cta p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            color: #edc1c2;
+        }
+
+        .cta-buttons {
             display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
-        .modal-content {
-            background: rgba(26, 26, 46, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            padding: 40px;
-            max-width: 500px;
-            width: 90%;
-            border: 2px solid var(--glass-border);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            animation: modalSlideIn 0.4s ease;
+        .secondary-btn {
+            padding: 15px 35px;
+            background: transparent;
+            border: 2px solid #50e4d7;
+            color: #50e4d7;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s;
         }
 
-        @keyframes modalSlideIn {
+        .secondary-btn:hover {
+            background: #50e4d7;
+            color: #18203b;
+            transform: scale(1.05);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(-50px);
+                transform: translateY(30px);
             }
             to {
                 opacity: 1;
@@ -368,793 +550,488 @@
             }
         }
 
-        /* OTP Input */
-        .otp-inputs {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin: 20px 0;
-        }
-
-        .otp-input {
-            width: 50px;
-            height: 60px;
-            text-align: center;
-            font-size: 24px;
-            border-radius: 12px;
-            border: 2px solid var(--glass-border);
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-        }
-
-        .otp-input:focus {
-            border-color: var(--pink);
-            outline: none;
-            box-shadow: 0 0 20px rgba(255, 0, 110, 0.4);
-        }
-
-        /* Pending Payment Banner */
-        .pending-banner {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 2000;
-            background: linear-gradient(135deg, rgba(255, 0, 110, 0.95), rgba(0, 212, 255, 0.95));
-            padding: 40px;
-            border-radius: 24px;
-            text-align: center;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-            animation: blink 2s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
-        .pending-banner h2 {
-            font-size: 2em;
-            margin-bottom: 20px;
-        }
-
-        /* Loading Spinner */
-        .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.1);
-            border-top: 4px solid var(--pink);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .logo {
-                font-size: 2em;
+            .phone-mockup {
+                display: none;
             }
 
-            .dj-grid {
+            section {
+                padding: 60px 20px;
+            }
+
+            .steps, .features-grid, .testimonials {
                 grid-template-columns: 1fr;
             }
+        }
 
-            .modal-content {
-                padding: 25px;
+        /* Scroll animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+          /* Footer */
+        .footer {
+            background: var(--background);
+            border-top: 1px solid var(--border);
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-content {
+            display: grid;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        @media (min-width: 768px) {
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
-        .hidden {
-            display: none !important;
+        @media (min-width: 1024px) {
+            .footer-content {
+                grid-template-columns: repeat(4, 1fr);
+            }
         }
 
-        .user-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
+        .footer-section h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            margin: 10px; 
         }
 
-        .logout-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--glass-border);
-            padding: 10px 20px;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .footer-section p {
+            color: var(--muted-foreground);
+            margin-bottom: 1rem;
+            margin: 10px; 
         }
 
-        .logout-btn:hover {
-            background: rgba(255, 0, 110, 0.2);
-            border-color: var(--pink);
-        }
-
-        select {
-            width: 100%;
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid var(--glass-border);
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        select option {
-            background: var(--dark-light);
-            color: white;
-        }
-
-        .equipment-list {
+        .footer-links {
             list-style: none;
-            padding: 15px;
-            background: rgba(0, 212, 255, 0.1);
-            border-radius: 12px;
-            margin: 15px 0;
+            margin: 10px;
         }
 
-        .equipment-list li {
-            padding: 8px 0;
-            border-bottom: 1px solid var(--glass-border);
+        .footer-links li {
+            margin-bottom: 0.5rem;
         }
 
-        .equipment-list li:last-child {
-            border-bottom: none;
+        .footer-links a {
+            color: var(--muted-foreground);
+            text-decoration: none;
+            transition: color 0.3s ease;
         }
 
-        .media-gallery {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding: 10px 0;
-            margin: 15px 0;
+        .footer-links a:hover {
+            color: var(--primary);
         }
-
-        .media-item {
-            min-width: 150px;
-            height: 100px;
-            border-radius: 12px;
-            object-fit: cover;
-            border: 2px solid var(--glass-border);
-        }
+        /* WHATSAPP BUTTON (FROM TAE V.02) */
+.whatsapp-btn{
+    position:fixed;
+    bottom:30px;
+    right:30px;
+    z-index:999;
+    animation:pulse 2s infinite;
+}
+.whatsapp-btn img{
+    width:60px;
+    height:60px;
+}
+@keyframes pulse{
+    0%,100%{transform:scale(1)}
+    50%{transform:scale(1.1)}
+}
     </style>
 </head>
 <body>
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+                  <div class="logo">
+      <img src="logo(no-bg) (150x150).png" alt="Basswala logo" loading="lazy" />
+    </div>
+<canvas id="bg-canvas"></canvas>
+<div class="hero-content">
+<h1>Rule the Night. Earn Like a Captain.</h1>
+<p>BassCaptain is the DJ booking app that puts you in control. Connect directly with clients and event owners. No middlemen. No waiting. Just pure gigs, instant bookings, and automatic payouts.</p>
+<a class="cta-btn" href="https://play.google.com/store/apps/details?id=com.basswaala.serviceprovider">Become a Captain Now</a>
+</div>
+<div class="phone-mockup">
+<div class="phone-screen">
+<div class="app-ui">
+<h3>Live Dashboard</h3>
+<div class="notification">🎵 New Booking: Skybar Club</div>
+<div class="notification">💰 Payment Received: ₹12,500</div>
+<div class="notification">🔥 Urgent Gig: Corporate Event</div>
+<div class="notification">📊 Earnings Today: ₹45,000</div>
+</div>
+</div>
+</div>
+</section>
+<!-- How It Works -->
+<section class="reveal" id="how-it-works">
+<h2>Four Steps to Freedom</h2>
+<div class="steps">
+<div class="step-card">
+<div class="step-icon">📱</div>
+<h3>Sign Up in Seconds</h3>
+<p>Use your phone or email to join the Basswala Captain network instantly.</p>
+</div>
+<div class="step-card">
+<div class="step-icon">🎧</div>
+<h3>Build Your DJ Profile</h3>
+<p>Showcase your style, experience, and availability. Let your vibe speak.</p>
+</div>
+<div class="step-card">
+<div class="step-icon">⚡</div>
+<h3>Accept Gigs Instantly</h3>
+<p>Browse bookings or grab urgent broadcasts. No approval needed. You're the boss.</p>
+</div>
+<div class="step-card">
+<div class="step-icon">💰</div>
+<h3>Get Paid Automatically</h3>
+<p>Cash or digital — payments flow directly to you after every gig.</p>
+</div>
+</div>
+</section>
+<!-- Power Features -->
+<section class="reveal" id="features">
+<h2>Built for Captains Who Mean Business</h2>
+<div class="features-grid">
+<div class="feature-card">
+<span class="feature-icon">🎵</span>
+<h3>Instant Bookings</h3>
+<p>No more chasing clients. Accept gigs with one tap and own your calendar. Become a Basswala Captain and watch your schedule fill up.</p>
+</div>
+<div class="feature-card">
+<span class="feature-icon">🔥</span>
+<h3>Urgent Broadcasts</h3>
+<p>High-paying, last-minute gigs? You see them first. Grab premium opportunities before anyone else and earn money as a DJ on your terms.</p>
+</div>
+<div class="feature-card">
+<span class="feature-icon">💰</span>
+<h3>Seamless Payments</h3>
+<p>Choose cash or online. Either way, you're in control. Track every rupee in your earnings dashboard.</p>
+</div>
+<div class="feature-card">
+<span class="feature-icon">📱</span>
+<h3>QR Check-ins</h3>
+<p>Verify bookings instantly with secure QR codes. No confusion. No disputes. Just smooth, professional service.</p>
+</div>
+<div class="feature-card">
+<span class="feature-icon">📍</span>
+<h3>Live Tracking</h3>
+<p>Know exactly where your client is. Navigate to venues with confidence using real-time GPS tracking.</p>
+</div>
+<div class="feature-card">
+<span class="feature-icon">📊</span>
+<h3>Earnings Dashboard</h3>
+<p>Watch your empire grow. Daily, weekly, monthly analytics at your fingertips. Know your worth.</p>
+</div>
+</div>
+</section>
+<!-- Pro Section -->
+<section class="reveal" id="pro">
+<div class="pro-section">
+<h2 style="color: #fff;">Go Pro. Dominate the Night Scene.</h2>
+<p style="text-align: center; font-size: 1.2rem; max-width: 800px; margin: 0 auto 3rem;">Unlock elite features and take your DJ career to the next level with BassCaptain Pro.</p>
+<div class="pro-features">
+<div class="pro-feature">
+<h4>🎚️ Multiple DJ Sub-Profiles</h4>
+<p>Manage different styles, aliases, or team members under one account. Expand your brand effortlessly.</p>
+</div>
+<div class="pro-feature">
+<h4>⚡ Auto Payouts After Every Gig</h4>
+<p>Get paid instantly after each ride or daily. No waiting for weekly settlements. Your money, your schedule.</p>
+</div>
+<div class="pro-feature">
+<h4>📈 Advanced Income Analytics</h4>
+<p>Deep-dive into your earnings with comprehensive breakdowns. See what's working, scale what's profitable.</p>
+</div>
+<div class="pro-feature">
+<h4>🚨 Priority Access to Urgent Gigs</h4>
+<p>Pro Captains see high-value broadcasts before everyone else. Be first in line for the best-paying events.</p>
+</div>
+<div class="pro-feature">
+<h4>💎 Verified Captain Badge</h4>
+<p>Stand out with exclusive verification. Clients trust Pros more, which means more bookings for you.</p>
+</div>
+</div>
+<div style="text-align: center; margin-top: 3rem;">
+<a class="cta-btn" href="https://play.google.com/store/apps/details?id=com.basswaala.serviceprovider">Upgrade to Pro</a>
+</div>
+</div>
+</section>
+<!-- Coming Soon -->
+
+<!-- FAQ -->
+<section class="reveal" id="faq">
+<h2>Got Questions? We've Got Answers.</h2>
+<div class="faq-container">
+<div class="faq-item">
+<div class="faq-question">How often do I get paid?</div>
+<div class="faq-answer">
+<p>Captains receive weekly payouts.</p>
+</div>
+</div>
+<div class="faq-item">
+<div class="faq-question">How much does BassCaptain cost?</div>
+<div class="faq-answer">
+<p>Free to join! BassCaptain Standard has zero subscription fees.</p>
+</div>
+</div>
+<div class="faq-item">
+<div class="faq-question">Do I need approval to start accepting bookings?</div>
+<div class="faq-answer">
+<p>Nope! Once your profile is complete, you can start accepting gigs immediately. You're the captain of your schedule.</p>
+</div>
+</div>
+<div class="faq-item">
+<div class="faq-question">What if a client cancels?</div>
+<div class="faq-answer">
+<p>You're protected by our cancellation policy. Depending on timing, you'll receive partial to full payment compensation.</p>
+</div>
+</div>
+<div class="faq-item">
+<div class="faq-question">Can I work in multiple cities?</div>
+<div class="faq-answer">
+<p>Absolutely! Update your service area anytime and accept bookings wherever your travels take you.</p>
+</div>
+</div>
+<div class="faq-item">
+<div class="faq-question">How do I contact support?</div>
+<div class="faq-answer">
+<p>24/7 in-app support, email us at support@basswala.com, or visit our Help Center at basswala.com/help.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="reveal" id="signup">
+<div class="final-cta">
+<h2>The Stage Is Waiting. Become a BassCaptain Today.</h2>
+<p>Join thousands of DJs who took control of their careers. Download BassCaptain now and start earning on your terms. No middlemen. No limits. Just you, your music, and a world of opportunity.</p>
+<div class="cta-buttons">
+<a class="cta-btn" href="#">Download on App Store</a>
+<a class="cta-btn" href="https://play.google.com/store/apps/details?id=com.basswaala.serviceprovider">Get it on Google Play</a>
+<a class="cta-btn" href="https://play.google.com/store/apps/details?id=com.basswaala.serviceprovider">Start Earning</a></div>
+<p style="margin-top: 2rem; font-style: italic;">BassCaptain by Basswala, Where DJs Become Legends</p>
+</div>
+</section>
+<!-- Footer -->
+<footer class="footer">
     <div class="container">
-        <header>
-            <div class="logo">🎧 BASSWALA</div>
-        </header>
-
-        <!-- Auth Screen -->
-        <div id="authScreen">
-            <div class="auth-container">
-                <div class="glass-card">
-                    <h2 class="auth-title">Welcome to Basswala</h2>
+        <div class="footer-content">
+            <!-- Logo & About -->
+            <div class="footer-section">
+                <div class="logo mb-4">
+                    <!-- Using an image for the logo for better control and styling -->
+                    <img src="logo(no-bg) (150x150).png" alt="BASSWALA Logo" style="width: 150px; height: 150px; border-radius: 50%; margin-right: 10px; vertical-align: middle;">
                     
-                    <div class="input-group">
-                        <label>Mobile Number</label>
-                        <input type="tel" id="phoneInput" placeholder="+91 XXXXX XXXXX" maxlength="10">
-                    </div>
-                    
-                    <button class="btn" style="width: 100%;" onclick="sendOTP()">Send OTP</button>
-                    
-                    <div class="divider">OR</div>
-                    
-                    <div id="g_id_onload"
-                         data-client_id="1021884895482-4107rt20dv3f3162f8somg1uss3puilg.apps.googleusercontent.com"
-                         data-callback="handleGoogleSignIn">
-                    </div>
-                    <div class="g_id_signin" 
-                         data-type="standard"
-                         data-size="large"
-                         data-theme="filled_black"
-                         data-text="signin_with"
-                         data-shape="pill"
-                         data-logo_alignment="left"
-                         style="width: 100%; margin-top: 20px;">
-                    </div>
-                    
-                    <button class="btn btn-secondary" style="width: 100%; margin-top: 15px;" onclick="googleSignIn()">
-                        Continue with Google
-                    </button>
                 </div>
+                <div class="social-links" style="display: flex; gap: 15px; margin-top: 20px;">
+                    <a href="https://www.facebook.com/share/1GAWkiMNRC/" target="_blank"rel="noopener noreferrer" class="social-link">
+                        <img src="https://img.icons8.com/ios-filled/30/ffffff/facebook-new.png" alt="Facebook" style="width: 30px; height: 30px;"/>
+                    </a>
+                    <a href="https://www.instagram.com/bass_wala.official?utm_source=qr&igsh=MTc3MHgxeDhkcGh4ZA==" target="_blank" rel="noopener noreferrer" class="social-link">
+                        <img src="https://img.icons8.com/ios-filled/30/ffffff/instagram-new--v1.png" alt="Instagram" style="width: 30px; height: 30px;"/>
+                    </a>
+                    <a href="https://x.com/bass_wala_?t=sm3XAsj41V2CMnl0xXFiUA&s=08" target="_blank" rel="noopener noreferrer" class="social-link">
+                        <img src="https://img.icons8.com/ios-filled/30/ffffff/twitterx--v1.png" alt="Twitter" style="width: 30px; height: 30px;"/>
+                    </a>
+                    <a href="https://www.youtube.com/@BASSWALAOFFICIAL" target="_blank" rel="noopener noreferrer"  class="social-link">
+                        <img src="https://img.icons8.com/ios-filled/30/ffffff/youtube-play--v1.png" alt="YouTube" style="width: 30px; height: 30px;"/>
+                    </a>
+                </div>
+            </div>
+
+
+            <!-- Services -->
+            <div class="footer-section">
+                <h3>Services</h3>
+                <ul class="footer-links">
+                    <li><a href="#">DJ Services</a></li>
+                    <li><a href="#">Speaker Rental</a></li>
+                    <li><a href="#">Event Management</a></li>
+                    <li><a href="#">Equipment Rental</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact -->
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                    <img src="https://img.icons8.com/ios-filled/20/ffffff/phone.png" alt="Phone" style="width: 20px; height: 20px;"/>
+                    <span><a href="tel:+91 99284 25013" style="color: inherit; text-decoration: none;">+91 99284 25013</a></span>
+                
+                    <br><img src="https://img.icons8.com/ios-filled/20/ffffff/new-post.png" alt="Mail" style="width: 20px; height: 20px;"/>
+                    <span><a href="mailto:bw@basswala.com" style="color: inherit; text-decoration: none;">bw@basswala.com</a></span>
+                
+                   <br> <img src="https://img.icons8.com/ios-filled/20/ffffff/marker--v1.png" alt="Location" style="width: 20px; height: 20px;"/>
+                    <span>Jaipur, India</span>
             </div>
         </div>
 
-        <!-- Main App Screen -->
-        <div id="mainScreen" class="hidden">
-            <div class="user-info glass-card">
-                <div>
-                    <strong>Welcome, <span id="userName"></span></strong><br>
-                    <small id="userContact"></small>
-                </div>
-                <button class="logout-btn" onclick="logout()">Logout</button>
+        <!-- Footer Bottom Menu -->
+        <div class="footer-bottom" style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 20px; margin-top: 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+            <div style="color: rgba(255, 255, 255, 0.7); font-size: 0.875rem;">
+                © 2025 BASSWALA. All rights reserved.
             </div>
-
-            <div id="djListSection">
-                <h2 style="margin-bottom: 20px; font-size: 2em;">Our BassCaptains</h2>
-                <div class="dj-grid" id="djGrid"></div>
+            <div class="footer-links-bottom" style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <a href="#" style="color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.3s ease;">Home</a>
+                <a href="Basswala_Privacy_Policy.html" style="color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.3s ease;">Privacy Policy</a>
+                <a href="Basswala_Terms_of_Use1.html" style="color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.3s ease;">Terms of Service</a>
             </div>
-
-            <div id="bookingSection" class="hidden booking-section">
-                <button class="btn btn-secondary" onclick="backToList()" style="margin-bottom: 20px;">← Back to DJ List</button>
-                
-                <div class="glass-card">
-                    <h2 id="selectedDJName" style="font-size: 2em; margin-bottom: 20px;"></h2>
-                    
-                    <div class="media-gallery" id="mediaGallery"></div>
-                    
-                    <div style="margin: 20px 0;">
-                        <strong>Equipment Included:</strong>
-                        <ul class="equipment-list" id="equipmentList"></ul>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label>Booking Date</label>
-                        <input type="date" id="bookingDate" min="">
-                    </div>
-                    
-                    <div class="input-group">
-                        <label>Duration (Hours)</label>
-                        <select id="duration" onchange="calculatePrice()">
-                            <option value="4">4 Hours</option>
-                            <option value="6">6 Hours</option>
-                            <option value="8">8 Hours</option>
-                            <option value="12">12 Hours</option>
-                        </select>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label>Event Location</label>
-                        <input type="text" id="eventLocation" placeholder="Enter your event address">
-                    </div>
-                    
-                    <button class="btn" onclick="detectLocation()" style="width: 100%; margin: 10px 0;">📍 Detect My Location</button>
-                    
-                    <div id="map"></div>
-                    
-                    <div id="distanceInfo" style="text-align: center; margin: 15px 0; font-size: 1.1em; color: var(--blue);"></div>
-                    
-                    <div class="price-breakdown" id="priceBreakdown"></div>
-                    
-                    <button class="btn" onclick="payAdvance()" style="width: 100%; font-size: 1.2em;">💳 Pay Advance (GST)</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- OTP Modal -->
-        <div id="otpModal" class="modal">
-            <div class="modal-content">
-                <h2 style="text-align: center; margin-bottom: 20px;">Enter OTP</h2>
-                <p style="text-align: center; margin-bottom: 20px;">We've sent a 6-digit OTP to your phone</p>
-                <div class="otp-inputs">
-                    <input type="text" class="otp-input" maxlength="1" id="otp1">
-                    <input type="text" class="otp-input" maxlength="1" id="otp2">
-                    <input type="text" class="otp-input" maxlength="1" id="otp3">
-                    <input type="text" class="otp-input" maxlength="1" id="otp4">
-                    <input type="text" class="otp-input" maxlength="1" id="otp5">
-                    <input type="text" class="otp-input" maxlength="1" id="otp6">
-                </div>
-                <button class="btn" onclick="verifyOTP()" style="width: 100%; margin-top: 20px;">Verify OTP</button>
-            </div>
-        </div>
-
-        <!-- Verification Modal -->
-        <div id="verificationModal" class="modal">
-            <div class="modal-content">
-                <h2 style="text-align: center; margin-bottom: 20px;">Booking Verification</h2>
-                <p style="text-align: center; margin-bottom: 20px;">Please verify both OTPs</p>
-                
-                <div class="input-group">
-                    <label>Client OTP: <strong id="clientOTPDisplay"></strong></label>
-                    <input type="text" id="clientOTPInput" placeholder="Enter Client OTP" maxlength="6">
-                </div>
-                
-                <div class="input-group">
-                    <label>BassCaptain OTP: <strong id="djOTPDisplay"></strong></label>
-                    <input type="text" id="djOTPInput" placeholder="Enter BassCaptain OTP" maxlength="6">
-                </div>
-                
-                <button class="btn" onclick="verifyBooking()" style="width: 100%; margin-top: 20px;">Verify Booking</button>
-            </div>
-        </div>
-
-        <!-- Pending Payment Banner -->
-        <div id="pendingBanner" class="hidden pending-banner">
-            <h2>⚠️ Remaining Amount Pending</h2>
-            <p style="font-size: 1.2em; margin: 20px 0;">Amount Due: ₹<span id="remainingAmount"></span></p>
-            <button class="btn" onclick="payRemaining()" style="margin: 10px;">Pay Online</button>
-            <button class="btn btn-secondary" onclick="payCash()">Pay Cash</button>
         </div>
     </div>
+</footer>
+<!-- WHATSAPP FLOATING BUTTON -->
+<a href="https://wa.me/919828425013?text=Hi%20BassCaptain%20Team,%20I%20want%20to%20know%20more."
+   target="_blank"
+   class="whatsapp-btn"
+   aria-label="Chat on WhatsApp">
+   <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+</a>
+<script>
+        // Three.js Background Animation
+        const canvas = document.getElementById('bg-canvas');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.position.z = 5;
 
-    <script>
-        // Initialize EmailJS
-        emailjs.init('service_wyni2njv');
+        // Create particles
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 1000;
+        const posArray = new Float32Array(particlesCount * 3);
 
-        // Session Data
-        let session = {
-            user: null,
-            selectedDJ: null,
-            booking: null,
-            clientOTP: null,
-            djOTP: null
-        };
+        for(let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 10;
+        }
 
-        // DJ Data
-        const djData = [
-            {
-                id: 1,
-                name: "DJ Rhythm Master",
-                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='250'%3E%3Crect fill='%23ff006e' width='300' height='250'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='white' text-anchor='middle' dominant-baseline='middle'%3EDJ Rhythm%3C/text%3E%3C/svg%3E",
-                videos: [],
-                basePrice: 1.5,
-                rating: 4.8,
-                location: { lat: 28.6139, lng: 77.2090, name: "Delhi, India" },
-                equipment: ["2x JBL Speakers", "Pioneer DDJ-1000", "Fog Machine", "LED Lights", "Microphone"]
-            },
-            {
-                id: 2,
-                name: "DJ BassKing",
-                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='250'%3E%3Crect fill='%2300d4ff' width='300' height='250'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='white' text-anchor='middle' dominant-baseline='middle'%3EDJ BassKing%3C/text%3E%3C/svg%3E",
-                videos: [],
-                basePrice: 10,
-                rating: 4.9,
-                location: { lat: 19.0760, lng: 72.8777, name: "Mumbai, India" },
-                equipment: ["4x Pioneer Speakers", "CDJ-3000", "Laser Lights", "Smoke Machine", "DJ Booth"]
-            },
-            {
-                id: 3,
-                name: "DJ ElectroWave",
-                image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='250'%3E%3Crect fill='%23ff006e' width='300' height='250'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='white' text-anchor='middle' dominant-baseline='middle'%3EDJ ElectroWave%3C/text%3E%3C/svg%3E",
-                videos: [],
-                basePrice: 10,
-                rating: 4.7,
-                location: { lat: 12.9716, lng: 77.5946, name: "Bangalore, India" },
-                equipment: ["3x Bose Speakers", "Traktor S4", "Moving Head Lights", "Confetti Cannon", "Mixer"]
-            }
-        ];
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('bookingDate').min = today;
-            setupOTPInputs();
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.02,
+            color: 0x50e4d7,
+            transparent: true,
+            opacity: 0.8
         });
 
-        // OTP Auto-focus
-        function setupOTPInputs() {
-            const inputs = document.querySelectorAll('.otp-input');
-            inputs.forEach((input, index) => {
-                input.addEventListener('input', (e) => {
-                    if (e.target.value.length === 1 && index < inputs.length - 1) {
-                        inputs[index + 1].focus();
-                    }
-                });
-                input.addEventListener('keydown', (e) => {
-                    if (e.key === 'Backspace' && e.target.value === '' && index > 0) {
-                        inputs[index - 1].focus();
-                    }
-                });
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+
+        // Animation
+        let mouseX = 0;
+        let mouseY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX / window.innerWidth - 0.5;
+            mouseY = e.clientY / window.innerHeight - 0.5;
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+            particlesMesh.rotation.y += 0.001;
+            particlesMesh.rotation.x = mouseY * 0.1;
+            particlesMesh.rotation.y = mouseX * 0.1;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Resize handler
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const faqItem = question.parentElement;
+                faqItem.classList.toggle('active');
             });
-        }
+        });
 
-        // Send OTP
-        function sendOTP() {
-            const phone = document.getElementById('phoneInput').value;
-            if (phone.length !== 10) {
-                alert('Please enter a valid 10-digit mobile number');
-                return;
-            }
-            document.getElementById('otpModal').classList.add('active');
-        }
-
-        // Verify OTP
-        function verifyOTP() {
-            const otp = Array.from({length: 6}, (_, i) => 
-                document.getElementById(`otp${i+1}`).value
-            ).join('');
-            
-            if (otp.length === 6) {
-                const phone = document.getElementById('phoneInput').value;
-                session.user = {
-                    name: 'User',
-                    phone: phone,
-                    loginMethod: 'phone'
-                };
-                showMainScreen();
-            } else {
-                alert('Please enter complete OTP');
-            }
-        }
-
-        // Google Sign In
-        function googleSignIn() {
-            // Simulated Google Sign In
-            session.user = {
-                name: 'Guest User',
-                email: 'tempmail310107@gmail.com',
-                loginMethod: 'google'
-            };
-            showMainScreen();
-        }
-
-        function handleGoogleSignIn(response) {
-            // Handle actual Google Sign In response
-            session.user = {
-                name: 'Google User',
-                email: 'user@gmail.com',
-                loginMethod: 'google'
-            };
-            showMainScreen();
-        }
-
-        // Show Main Screen
-        function showMainScreen() {
-            document.getElementById('authScreen').classList.add('hidden');
-            document.getElementById('mainScreen').classList.remove('hidden');
-            document.getElementById('otpModal').classList.remove('active');
-            
-            document.getElementById('userName').textContent = session.user.name;
-            document.getElementById('userContact').textContent = session.user.phone || session.user.email;
-            
-            renderDJList();
-        }
-
-        // Render DJ List
-        function renderDJList() {
-            const grid = document.getElementById('djGrid');
-            grid.innerHTML = djData.map(dj => `
-                <div class="dj-card glass-card" onclick="selectDJ(${dj.id})">
-                    <img src="${dj.image}" alt="${dj.name}" class="dj-image">
-                    <div class="dj-info">
-                        <div class="dj-name">${dj.name}</div>
-                        <div class="dj-rating">⭐ ${dj.rating} / 5.0</div>
-                        <div class="dj-location">📍 ${dj.location.name}</div>
-                        <div class="dj-price">💰 Base: ₹${dj.basePrice.toLocaleString()}</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Select DJ
-        function selectDJ(id) {
-            session.selectedDJ = djData.find(dj => dj.id === id);
-            document.getElementById('djListSection').classList.add('hidden');
-            document.getElementById('bookingSection').classList.remove('hidden');
-            
-            document.getElementById('selectedDJName').textContent = session.selectedDJ.name;
-            
-            // Media Gallery
-            const gallery = document.getElementById('mediaGallery');
-            gallery.innerHTML = `<img src="${session.selectedDJ.image}" class="media-item" alt="${session.selectedDJ.name}">`;
-            
-            // Equipment List
-            const equipList = document.getElementById('equipmentList');
-            equipList.innerHTML = session.selectedDJ.equipment.map(item => `<li>✓ ${item}</li>`).join('');
-            
-            initMap();
-            calculatePrice();
-        }
-
-        // Back to List
-        function backToList() {
-            document.getElementById('bookingSection').classList.add('hidden');
-            document.getElementById('djListSection').classList.remove('hidden');
-            session.selectedDJ = null;
-        }
-
-        // Initialize Map
-        let map = null;
-        let markers = [];
+        // Scroll reveal animation
+        const reveals = document.querySelectorAll('.reveal');
         
-        function initMap() {
-            if (map) {
-                map.remove();
-            }
-            
-            map = L.map('map').setView([20.5937, 78.9629], 5);
-            
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
-            
-            // Add DJ marker
-            const djMarker = L.marker([session.selectedDJ.location.lat, session.selectedDJ.location.lng])
-                .addTo(map)
-                .bindPopup(`<b>${session.selectedDJ.name}</b><br>${session.selectedDJ.location.name}`);
-            markers.push(djMarker);
-        }
+        function checkReveal() {
+            reveals.forEach(reveal => {
+                const windowHeight = window.innerHeight;
+                const revealTop = reveal.getBoundingClientRect().top;
+                const revealPoint = 150;
 
-        // Detect Location
-        function detectLocation() {
-            if (!navigator.geolocation) {
-                alert('Geolocation is not supported by your browser');
-                return;
-            }
-            
-            navigator.geolocation.getCurrentPosition((position) => {
-                const lat = position.coords.latitude;
-                const lng = position.coords.longitude;
-                
-                // Reverse geocode to get address
-                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        document.getElementById('eventLocation').value = data.display_name;
-                        updateMapWithEventLocation(lat, lng);
-                    })
-                    .catch(() => {
-                        document.getElementById('eventLocation').value = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
-                        updateMapWithEventLocation(lat, lng);
-                    });
-            }, (error) => {
-                alert('Unable to retrieve your location. Please enter manually.');
+                if(revealTop < windowHeight - revealPoint) {
+                    reveal.classList.add('active');
+                }
             });
         }
 
-        // Update Map with Event Location
-        function updateMapWithEventLocation(lat, lng) {
-            // Remove previous event marker
-            if (markers.length > 1) {
-                map.removeLayer(markers[1]);
-                markers.pop();
-            }
-            
-            // Add event marker
-            const eventMarker = L.marker([lat, lng])
-                .addTo(map)
-                .bindPopup('<b>Event Location</b>');
-            markers.push(eventMarker);
-            
-            // Draw route line
-            const latlngs = [
-                [session.selectedDJ.location.lat, session.selectedDJ.location.lng],
-                [lat, lng]
-            ];
-            L.polyline(latlngs, {color: '#ff006e', weight: 3}).addTo(map);
-            
-            // Fit bounds
-            map.fitBounds(latlngs);
-            
-            // Calculate distance
-            const distance = calculateDistance(
-                session.selectedDJ.location.lat,
-                session.selectedDJ.location.lng,
-                lat,
-                lng
-            );
-            
-            document.getElementById('distanceInfo').textContent = `📏 Distance: ${distance.toFixed(2)} km`;
-            calculatePrice();
-        }
+        window.addEventListener('scroll', checkReveal);
+        checkReveal();
 
-        // Calculate Distance (Haversine formula)
-        function calculateDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371; // Earth's radius in km
-            const dLat = (lat2 - lat1) * Math.PI / 180;
-            const dLon = (lon2 - lon1) * Math.PI / 180;
-            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                      Math.sin(dLon/2) * Math.sin(dLon/2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            return R * c;
-        }
-
-        // Calculate Price
-        function calculatePrice() {
-            if (!session.selectedDJ) return;
-            
-            const duration = parseInt(document.getElementById('duration').value);
-            const basePrice = session.selectedDJ.basePrice;
-            const gst = basePrice * 0.18;
-            const total = basePrice + gst;
-            
-            session.booking = {
-                basePrice,
-                gst,
-                total,
-                advance: gst,
-                remaining: basePrice,
-                duration
-            };
-            
-            const breakdown = document.getElementById('priceBreakdown');
-            breakdown.innerHTML = `
-                <div class="price-row">
-                    <span>Base Price (${duration} hours):</span>
-                    <span>₹${basePrice.toLocaleString()}</span>
-                </div>
-                <div class="price-row">
-                    <span>GST (18%):</span>
-                    <span>₹${gst.toLocaleString()}</span>
-                </div>
-                <div class="price-row price-total">
-                    <span>Total Amount:</span>
-                    <span>₹${total.toLocaleString()}</span>
-                </div>
-                <div class="price-row" style="color: var(--blue); margin-top: 15px;">
-                    <span>Advance Payable (GST):</span>
-                    <span>₹${gst.toLocaleString()}</span>
-                </div>
-            `;
-        }
-
-        // Pay Advance
-        function payAdvance() {
-            const date = document.getElementById('bookingDate').value;
-            const location = document.getElementById('eventLocation').value;
-            
-            if (!date || !location) {
-                alert('Please fill in all required booking details (Date and Location)');
-                return;
-            }
-            
-            // Razorpay Integration
-            const options = {
-                key: 'rzp_live_RVz3AKcWwIHkRM', // Replace with your Razorpay key
-                amount: Math.round(session.booking.advance * 100), // Amount in paise
-                currency: 'INR',
-                name: 'Basswala',
-                description: 'Advance Payment (GST)',
-                image: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100"%3E%3Ctext x="50" y="50" font-size="40" text-anchor="middle" dominant-baseline="middle"%3E🎧%3C/text%3E%3C/svg%3E',
-                handler: function(response) {
-                    handleAdvancePaymentSuccess(response);
-                },
-                prefill: {
-                    name: session.user.name,
-                    email: session.user.email || '',
-                    contact: session.user.phone || ''
-                },
-                theme: {
-                    color: '#ff006e'
-                },
-                modal: {
-                    ondismiss: function() {
-                        alert('Payment cancelled. Please try again.');
-                    }
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if(target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
                 }
-            };
-            
-            const razorpay = new Razorpay(options);
-            razorpay.open();
-        }
+            });
+        });
 
-        // Handle Advance Payment Success
-        function handleAdvancePaymentSuccess(response) {
-            // Generate OTPs
-            session.clientOTP = Math.floor(100000 + Math.random() * 900000).toString();
-            session.djOTP = Math.floor(100000 + Math.random() * 900000).toString();
+        // Counter animation for stats
+        function animateCounter(element) {
+            const target = parseInt(element.textContent.replace(/[^\d]/g, ''));
+            const duration = 2000;
+            const increment = target / (duration / 16);
+            let current = 0;
             
-            // Send email notification
-            sendBookingEmail('advance_paid');
-            
-            // Show verification modal
-            document.getElementById('clientOTPDisplay').textContent = session.clientOTP;
-            document.getElementById('djOTPDisplay').textContent = session.djOTP;
-            document.getElementById('verificationModal').classList.add('active');
-        }
-
-        // Verify Booking
-        function verifyBooking() {
-            const clientInput = document.getElementById('clientOTPInput').value;
-            const djInput = document.getElementById('djOTPInput').value;
-            
-            if (clientInput === session.clientOTP && djInput === session.djOTP) {
-                document.getElementById('verificationModal').classList.remove('active');
-                
-                // Send verification email
-                sendBookingEmail('verified');
-                
-                // Show pending payment banner
-                document.getElementById('remainingAmount').textContent = session.booking.remaining.toFixed(2);
-                document.getElementById('pendingBanner').classList.remove('hidden');
-                
-                // Clear OTP inputs
-                document.getElementById('clientOTPInput').value = '';
-                document.getElementById('djOTPInput').value = '';
-            } else {
-                alert('Invalid OTPs. Please check and try again.');
-            }
-        }
-
-        // Pay Remaining
-        function payRemaining() {
-            const options = {
-                key: 'rzp_live_RVz3AKcWwIHkRM', // Replace with your Razorpay key
-                amount: Math.round(session.booking.remaining * 100),
-                currency: 'INR',
-                name: 'Basswala',
-                description: 'Final Payment',
-                image: 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100"%3E%3Ctext x="50" y="50" font-size="40" text-anchor="middle" dominant-baseline="middle"%3E🎧%3C/text%3E%3C/svg%3E',
-                handler: function(response) {
-                    handleFinalPaymentSuccess();
-                },
-                prefill: {
-                    name: session.user.name,
-                    email: session.user.email || '',
-                    contact: session.user.phone || ''
-                },
-                theme: {
-                    color: '#00d4ff'
+            const timer = setInterval(() => {
+                current += increment;
+                if(current >= target) {
+                    element.textContent = element.textContent.replace(/[\d,]+/, target.toLocaleString('en-IN'));
+                    clearInterval(timer);
+                } else {
+                    element.textContent = element.textContent.replace(/[\d,]+/, Math.floor(current).toLocaleString('en-IN'));
                 }
-            };
-            
-            const razorpay = new Razorpay(options);
-            razorpay.open();
+            }, 16);
         }
 
-        // Handle Final Payment Success
-        function handleFinalPaymentSuccess() {
-            sendBookingEmail('final_payment');
-            completeBooking();
-        }
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    const statNumbers = entry.target.querySelectorAll('.stat-number');
+                    statNumbers.forEach(animateCounter);
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
 
-        // Pay Cash
-        function payCash() {
-            if (confirm('You have selected Cash Payment. Please pay ₹' + session.booking.remaining.toLocaleString() + ' to the BassCaptain on the event day.')) {
-                sendBookingEmail('cash_selected');
-                completeBooking();
-            }
-        }
-
-        // Complete Booking
-        function completeBooking() {
-            document.getElementById('pendingBanner').classList.add('hidden');
-            alert('🎉 Booking Confirmed! Check your email for details.');
-            
-            // Reset and return to home
-            setTimeout(() => {
-                backToList();
-                window.scrollTo(0, 0);
-            }, 2000);
-        }
-
-        // Send Booking Email
-        function sendBookingEmail(stage) {
-            const templateParams = {
-                to_email: session.user.email || 'turnaroundexpertshp@gmail.com',
-                user_name: session.user.name,
-                dj_name: session.selectedDJ.name,
-                booking_date: document.getElementById('bookingDate').value,
-                duration: session.booking.duration,
-                event_location: document.getElementById('eventLocation').value,
-                base_price: session.booking.basePrice,
-                gst: session.booking.gst,
-                total: session.booking.total,
-                advance: session.booking.advance,
-                remaining: session.booking.remaining,
-                stage: stage,
-                client_otp: session.clientOTP || 'N/A',
-                dj_otp: session.djOTP || 'N/A'
-            };
-            
-            // EmailJS send (replace 'YOUR_TEMPLATE_ID' with actual template)
-            emailjs.send('service_wyni2njv', 'template_kmzg0q6', templateParams)
-                .then(() => console.log('Email sent successfully'))
-                .catch((error) => console.error('Email failed:', error));
-        }
-
-        // Logout
-        function logout() {
-            if (confirm('Are you sure you want to logout?')) {
-                session = {
-                    user: null,
-                    selectedDJ: null,
-                    booking: null,
-                    clientOTP: null,
-                    djOTP: null
-                };
-                document.getElementById('mainScreen').classList.add('hidden');
-                document.getElementById('authScreen').classList.remove('hidden');
-                document.getElementById('phoneInput').value = '';
-            }
-        }
+        const statsSection = document.querySelector('.stats');
+        if(statsSection) observer.observe(statsSection);
     </script>
 </body>
 </html>
